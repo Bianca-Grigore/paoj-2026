@@ -1,5 +1,9 @@
 package com.pao.laboratory03.bonus;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Exercițiul 5 (Bonus) — Sistem de gestiune task-uri cu audit log
  *
@@ -155,9 +159,79 @@ package com.pao.laboratory03.bonus;
  */
 public class Main {
     public static void main(String[] args) {
-        // TODO: implementează toți cei 10 pași de mai sus
-        // Creează TOATE clasele necesare în acest pachet (bonus/)
-        // Nu ai subpachete impuse — organizează cum consideri
+
+        TaskService taskService = TaskService.getInstance();
+
+
+        System.out.println("Adaugă minim 5 task-uri cu priorități diferite\n");
+
+        Task task1= taskService.addTask("Fix login bug", Priority.CRITICAL);
+        Task task2= taskService.addTask("Add dark mode", Priority.LOW);
+        Task task3= taskService.addTask("Update docs", Priority.MEDIUM);
+        Task task4 = taskService.addTask("Fix memory leak", Priority.HIGH);
+        Task task5 = taskService.addTask("Refactor DB layer", Priority.HIGH);
+        System.out.println("Adaugat: " + task1);
+        System.out.println("Adaugat: " + task2);
+        System.out.println("Adaugat: " + task3);
+        System.out.println("Adaugat: " + task4);
+        System.out.println("Adaugat: " + task5);
+
+        System.out.println("\nAsignează 3 task-uri\n");
+
+        taskService.assignTask(task1.getId(), "Ana");
+        taskService.assignTask(task3.getId(), "Mihai");
+        taskService.assignTask(task4.getId(), "Elena");
+        System.out.println(task1.getId() + " -> " + task1.getAssignee());
+        System.out.println(task3.getId() + " -> " + task3.getAssignee());
+        System.out.println(task4.getId() + " -> " + task4.getAssignee());
+
+        System.out.println("\nAsignare status task-uri (inclusiv tranziție invalidă în try-catch)\n");
+
+        taskService.changeStatus(task1.getId(), Status.IN_PROGRESS);
+        System.out.println(task1.getId() + ": " + task1.getStatus());
+
+        taskService.changeStatus(task1.getId(), Status.DONE);
+        System.out.println(task1.getId() + ": " + task1.getStatus());
+
+        taskService.changeStatus(task3.getId(), Status.IN_PROGRESS);
+        System.out.println(task3.getId() + ": " + task3.getStatus());
+
+        try {
+            taskService.changeStatus(task1.getId(), Status.TODO);
+        } catch (InvalidTransitionException e) {
+            System.out.println("InvalidTransitionException: " + e.getMessage());
+    }
+
+        System.out.println("\n Afișează task-uri pe prioritate HIGH\n ");
+        System.out.println(taskService.getTasksByPriority(Priority.HIGH));
+
+        System.out.println("\n Afișează sumarul pe status\n");
+        Map<Status, Long> statusSummary = taskService.getStatusSummary();
+        for (Status status : Status.values()) {
+            System.out.println(status.name() + ": " + statusSummary.getOrDefault(status, 0L));
+        }
+
+        System.out.println("\n Afișează task-uri neasignate\n" );
+        List<Task> task_neasig= taskService.getUnassignedTasks();
+        for( Task t : task_neasig){
+            System.out.println(t.getId() + ": " + t.getTitle());
+        }
+
+        System.out.println("\nCalculează scorul de urgență total\n");
+
+        System.out.println("Total: " + taskService.getTotalUrgencyScore(5));
+
+        System.out.println("\nAfișează audit log-ul complet\n");
+        taskService.printAuditLog();
+
+        System.out.println("\nÎncearcă să adaugi un task cu id duplicat → DuplicateTaskException?\n");
+
+        System.out.println("\nÎncearcă să cauți un task inexistent → TaskNotFoundException\n");
+            try {
+                taskService.changeStatus("T999", Status.DONE);
+            } catch (TaskNotFoundException e) {
+                System.out.println("TaskNotFoundException: " + e.getMessage());
+            }
     }
 }
 

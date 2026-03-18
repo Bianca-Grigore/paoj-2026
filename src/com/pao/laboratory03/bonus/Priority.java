@@ -1,0 +1,20 @@
+package com.pao.laboratory03.bonus;
+
+public enum Priority {
+    LOW(1, 1.0),
+    MEDIUM(2, 1.5),
+    HIGH(3, 2.0),
+    CRITICAL(4, 3.0);
+
+    private int level;
+    private double multiplier;
+
+    Priority(int level, double multip) {
+        this.level = level;
+        this.multiplier = multip;
+    }
+
+    double calculateScore(int baseDays){
+        return baseDays * multiplier;
+    }
+}
