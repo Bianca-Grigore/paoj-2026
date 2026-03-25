@@ -11,6 +11,11 @@ public class Angajat implements Comparable<Angajat>{
         this.salariu = salariu;
     }
 
+    @Override
+    public String toString(){
+        return "Angajat{nume= " + nume + ", departament=Departament[nume = " + departament.nume() + ", locatie = " + departament.locatie() + "], salariu= " +salariu + "}";
+    }
+
 
     @Override
     public int compareTo(Angajat other){

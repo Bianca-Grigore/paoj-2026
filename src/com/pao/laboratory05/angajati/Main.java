@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+        AngajatService angajat = AngajatService.getInstance();
         while (true) {
             System.out.println("\n===== Gestionare Angajați =====");
             System.out.println("1. Adaugă angajat");
@@ -39,16 +39,16 @@ public class Main {
                     String locatie_dep = scanner.nextLine();
                     Departament dep = new Departament(nume_departament, locatie_dep);
 
-                    AngajatService.getInstance().addAngajat(new Angajat(nume, dep, salariu));
+                    angajat.addAngajat(new Angajat(nume, dep, salariu));
                     break;
 
                 case 2:
-                    AngajatService.getInstance().listBySalary();
+                    angajat.listBySalary();
                     break;
                 case 3:
                     System.out.println("Nume departament: ");
                     String numeDept = scanner.nextLine();
-                    AngajatService.getInstance().findByDepartament(numeDept);
+                    angajat.findByDepartament(numeDept);
                     break;
                 case 0:
                     System.out.println("La revedere!");
