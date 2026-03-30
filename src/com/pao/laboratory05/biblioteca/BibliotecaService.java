@@ -39,9 +39,4 @@ public class BibliotecaService {
             System.out.println(c);
         }
     }
-
-
-
-
-
 }
