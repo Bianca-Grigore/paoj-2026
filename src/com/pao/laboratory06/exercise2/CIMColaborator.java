@@ -14,14 +14,13 @@ public class CIMColaborator extends Colaborator implements PersoanaFizica {
         super();
     }
 
-
     @Override
     public double calculeazaVenitNetAnual() {
-        double venit_net_anual = venit_brut_lunar * 12 * 0.55;
+        double venitNetAnual = venitBrutLunar * 12 * 0.55;
         if(are_bonus){
-            venit_net_anual += venit_net_anual * 0.10;
+            venitNetAnual += venitNetAnual * 0.10;
         }
-        return venit_net_anual;
+        return venitNetAnual;
     }
 
     @Override
@@ -31,14 +30,13 @@ public class CIMColaborator extends Colaborator implements PersoanaFizica {
 
     @Override
     public void citeste(Scanner in) {
-        super.citeste(in); // Citește Nume, Prenume, Salariu
+        super.citeste(in);
 
-        // Verificăm dacă mai există text pe linie pentru bonusul opțional
         if (in.hasNext()) {
             String bonusStr = in.next();
             this.are_bonus = bonusStr.equalsIgnoreCase("DA");
         } else {
-            this.are_bonus = false; // Default NU conform cerinței
+            this.are_bonus = false;
         }
     }
 

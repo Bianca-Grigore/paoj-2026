@@ -6,23 +6,21 @@ import java.util.Scanner;
 public abstract class Colaborator implements IOperatiiCitireScriere {
     String nume;
     String prenume;
-    double venit_brut_lunar;
+    double venitBrutLunar;
 
     public Colaborator() {
     }
     public Colaborator(String nume, String prenume, double venit){
         this.nume = nume;
         this.prenume = prenume;
-        this.venit_brut_lunar = venit;
+        this.venitBrutLunar = venit;
     }
 
     @Override
     public void citeste(Scanner in) {
-        // next() citește un singur cuvânt și sare peste spațiile albe
         this.nume = in.next();
         this.prenume = in.next();
-        // nextDouble() citește valoarea numerică
-        this.venit_brut_lunar = in.nextDouble();
+        this.venitBrutLunar = in.nextDouble();
     }
 
     @Override
@@ -32,6 +30,4 @@ public abstract class Colaborator implements IOperatiiCitireScriere {
     }
 
     public abstract double calculeazaVenitNetAnual();
-
-
 }

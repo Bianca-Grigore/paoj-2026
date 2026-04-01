@@ -1,11 +1,10 @@
-
 package com.pao.laboratory06.exercise2;
 
 import java.util.Scanner;
 
 public class SRLColaborator extends Colaborator implements PersoanaJuridica {
 
-    private double cheltuieli_lunare;
+    private double cheltuieliLunare;
 
     public SRLColaborator() {
 
@@ -14,7 +13,7 @@ public class SRLColaborator extends Colaborator implements PersoanaJuridica {
     @Override
     public void citeste(Scanner in){
         super.citeste(in);
-        this.cheltuieli_lunare = in.nextDouble();
+        this.cheltuieliLunare = in.nextDouble();
         }
 
     @Override
@@ -24,13 +23,12 @@ public class SRLColaborator extends Colaborator implements PersoanaJuridica {
 
     @Override
     public double calculeazaVenitNetAnual() {
-        double venit_net_anual = (venit_brut_lunar - cheltuieli_lunare) * 12 * 0.84;
-        return venit_net_anual;
+        return (venitBrutLunar - cheltuieliLunare) * 12 * 0.84;
     }
 
-    public SRLColaborator(String nume, String prenume, double venit_brut_lunar, double cheltuieli_lunare){
+    public SRLColaborator(String nume, String prenume, double venit_brut_lunar, double cheltuieliLunare){
         super(nume, prenume, venit_brut_lunar);
-        this.cheltuieli_lunare = cheltuieli_lunare;
+        this.cheltuieliLunare = cheltuieliLunare;
     }
 
     @Override

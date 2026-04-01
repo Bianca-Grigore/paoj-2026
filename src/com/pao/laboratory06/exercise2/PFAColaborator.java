@@ -3,12 +3,12 @@ package com.pao.laboratory06.exercise2;
 import java.util.Scanner;
 
 public class PFAColaborator extends Colaborator implements PersoanaFizica {
-    private double cheltuieli_lunare;
-    private final double salariu_minim_brut = 48600.00 ;
+    private double cheltuieliLunare;
+    private final double salariuMinimBrut = 48600.00 ;
 
-    public PFAColaborator(String nume, String prenume, double venit_brut_lunar, double cheltuieli_lunare) {
+    public PFAColaborator(String nume, String prenume, double venit_brut_lunar, double cheltuieliLunare) {
         super(nume, prenume, venit_brut_lunar);
-        this.cheltuieli_lunare= cheltuieli_lunare;
+        this.cheltuieliLunare = cheltuieliLunare;
     }
 
     public PFAColaborator() {
@@ -17,7 +17,7 @@ public class PFAColaborator extends Colaborator implements PersoanaFizica {
     @Override
     public void citeste(Scanner in) {
         super.citeste(in);
-        this.cheltuieli_lunare = in.nextDouble();
+        this.cheltuieliLunare = in.nextDouble();
     }
 
     @Override
@@ -27,28 +27,28 @@ public class PFAColaborator extends Colaborator implements PersoanaFizica {
 
     @Override
     public double calculeazaVenitNetAnual() {
-        double venit_net = (venit_brut_lunar - cheltuieli_lunare) * 12;
-        double impozit_venit = 0.10 * venit_net;
+        double venitNet = (venitBrutLunar - cheltuieliLunare) * 12;
+        double impozitVenit = 0.10 * venitNet;
         double CASS = 0;
         double CAS = 0;
 
-        if (venit_net < 6 * salariu_minim_brut) {
-            CASS = 0.10 * (6 * salariu_minim_brut);
-        } else if (venit_net >= 6 * salariu_minim_brut && venit_net <= 72 * salariu_minim_brut) {
-            CASS = 0.10 * venit_net;
-        } else if (venit_net > 72 * salariu_minim_brut) {
-            CASS = 0.10 * (72 * salariu_minim_brut);
+        if (venitNet < 6 * salariuMinimBrut) {
+            CASS = 0.10 * (6 * salariuMinimBrut);
+        } else if (venitNet >= 6 * salariuMinimBrut && venitNet <= 72 * salariuMinimBrut) {
+            CASS = 0.10 * venitNet;
+        } else if (venitNet > 72 * salariuMinimBrut) {
+            CASS = 0.10 * (72 * salariuMinimBrut);
         }
 
-        if (venit_net < 12 * salariu_minim_brut) {
+        if (venitNet < 12 * salariuMinimBrut) {
             CAS = 0;
-        } else if (venit_net >= 12 * salariu_minim_brut && venit_net <= 24 * salariu_minim_brut) {
-            CAS = 0.25 * (12 * salariu_minim_brut);
-        } else if (venit_net > 24 * salariu_minim_brut) {
-            CAS = 0.25 * (24 * salariu_minim_brut);
+        } else if (venitNet >= 12 * salariuMinimBrut && venitNet <= 24 * salariuMinimBrut) {
+            CAS = 0.25 * (12 * salariuMinimBrut);
+        } else if (venitNet > 24 * salariuMinimBrut) {
+            CAS = 0.25 * (24 * salariuMinimBrut);
         }
 
-        return venit_net - impozit_venit - CASS - CAS;
+        return venitNet - impozitVenit - CASS - CAS;
     }
 
     @Override
