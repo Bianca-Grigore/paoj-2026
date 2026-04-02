@@ -17,16 +17,25 @@ public class PersoanaJuridica extends Persoana implements PlataOnlineSMS{
 
     @Override
     public boolean trimiteSMS(String mesaj) {
-        if(getTelefon() != null){
+        if (mesaj == null || mesaj.trim().isEmpty()) {
+            return false;
+        }
+
+        if (getTelefon() != null && !getTelefon().trim().isEmpty()) {
             smsTrimise.add(mesaj);
             return true;
         }
+
         return false;
     }
 
     @Override
     public void autentificare(String user, String parola) {
-
+        if(user == null || user.trim().isEmpty() || parola == null || parola.trim().isEmpty()){
+            throw new IllegalArgumentException("Campurile pentru user si parola nu trebuie sa fie null/goale.");
+        }
+        else
+            System.out.println("Autentificare reusita pentru " + user);
     }
 
     @Override
@@ -36,6 +45,7 @@ public class PersoanaJuridica extends Persoana implements PlataOnlineSMS{
 
     @Override
     public boolean efectuarePlata(double suma) {
-        return false;
+        return suma > 0;
     }
+
 }
