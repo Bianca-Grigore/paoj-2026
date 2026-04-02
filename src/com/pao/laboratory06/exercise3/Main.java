@@ -37,6 +37,9 @@ public class Main {
             System.out.println(inginer);
         }
 
+
+
+
         System.out.println("\n====Accesul la un inginer prin PlataOnline====\n");
 
         PlataOnline referintaInginer = new Inginer("Marin", "Alexandru", "0723456784", 7000.00);
@@ -68,10 +71,14 @@ public class Main {
         System.out.println(referintaInginer.consultareSold());
 
 
+
+
         System.out.println("\n====Exemplificare inacesibilitate la metodele din Inginer: ====\n");
         //decomentarea liniilor de mai jos vor declansa erori pentru ca functiile nu apartin clasei PlataOnline, ci clasei Inginer, iar referinta este de tip PlataOnline
         //referintaInginer.getNume();
         //referintaInginer.getSalariu();
+
+
 
 
         System.out.println("\n====Afisare constante din enum====\n ");
@@ -79,6 +86,60 @@ public class Main {
             System.out.println(c + " " + c.getValoare());
         }
 
+
+
+
         System.out.println("\n====Acces la PersoanaJuridica prin ref de tip PlataOnlineSMS====\n");
+
+        //ref la PersoanaJuridica fara telefon adaugat ca sa exemplific mai tarziu cazul de false
+
+        PlataOnlineSMS referintaPJ = new PersoanaJuridica("SC FIRMA SRL", "firma");
+
+        System.out.println("\n====Metode accesare prin referintaPJ (cele din PlataOnlineSMS si PlataOnline)====\n");
+
+        referintaPJ.autentificare("scfirma", "parolafirma");
+
+        if(referintaPJ.trimiteSMS("Salut, aceasta este o notificare pentru plata online.")){
+            System.out.println("\nSMS trimis\n");
+        }        else
+            System.out.println("\nSMS nu a fost trimis (nu exista numar de telefon)\n");
+
+        if(referintaPJ.trimiteSMS(""))
+            System.out.println("\nSMS trimis\n");
+        else
+            System.out.println("\nSMS nu a fost trimis (mesaj invalid)\n");
+
+        System.out.println("Consultare sold " + referintaPJ.consultareSold());
+
+        if(referintaPJ.efectuarePlata(2500.00))
+            System.out.println("\nPlata a fost efectuata cu succes.\n");
+        else
+            System.out.println("\nPlata nu a fost efectuata.\n");
+
+        System.out.println("\n==== Demonstrare stocare mesaje cu succes ====\n");
+
+        PlataOnlineSMS referintaPjValida = new PersoanaJuridica("SC altafirma SRL", "alta", "0799888777");
+
+        if(referintaPjValida.trimiteSMS("mesaj 1")) {
+            System.out.println("SMS trimis cu succes");
+        }
+        if(referintaPjValida.trimiteSMS("mesaj 2")) {
+            System.out.println("SMS trimis cu succes");
+        }
+        if(referintaPjValida.trimiteSMS("mesaj 3")) {
+            System.out.println("SMS trimis cu succes");
+        }
+
+        if(referintaPjValida.trimiteSMS("")) {
+            System.out.println("SMS trimis cu succes");
+        }
+        else
+            System.out.println("Nu are mesaj si nu va aparea in lista");
+
+        if (referintaPjValida instanceof PersoanaJuridica) {
+            PersoanaJuridica downcast = (PersoanaJuridica) referintaPjValida;
+            System.out.println("Mesajele stocate in lista firmei sunt:");
+            System.out.println(downcast.getSmsTrimise());
+        }
     }
 }

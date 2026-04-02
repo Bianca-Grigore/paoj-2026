@@ -15,6 +15,10 @@ public class PersoanaJuridica extends Persoana implements PlataOnlineSMS{
         super(nume, prenume, telefon);
     }
 
+    public List<String> getSmsTrimise(){
+        return smsTrimise;
+    }
+
     @Override
     public boolean trimiteSMS(String mesaj) {
         if (mesaj == null || mesaj.trim().isEmpty()) {
