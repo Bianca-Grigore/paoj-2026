@@ -1,7 +1,6 @@
 package com.pao.laboratory07.exercise2;
 
 import java.util.*;
-import com.pao.laboratory07.exercise1.OrderState;
 import java.util.Locale;
 
 public class Main {
@@ -13,6 +12,7 @@ public class Main {
         List<Comanda> comenzi = new ArrayList<>();
         int nrStandard = 0, nrDiscounted = 0, nrGift = 0;
         double sumaStandard = 0, sumaDiscounted = 0;
+
         for (int i = 0; i < n; i++) {
             String line = sc.nextLine().trim();
             String[] tokens = line.split(" ");
