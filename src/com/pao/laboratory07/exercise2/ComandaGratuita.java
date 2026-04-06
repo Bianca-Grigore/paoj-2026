@@ -1,0 +1,13 @@
+package com.pao.laboratory07.exercise2;
+
+public non-sealed class ComandaGratuita extends  Comanda {
+
+    public ComandaGratuita(String nume){
+        super(nume);
+    }
+
+    @Override
+    public double pretFinal() {
+        return 0.0;
+    }
+}
