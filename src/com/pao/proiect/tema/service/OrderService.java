@@ -29,6 +29,14 @@ public class OrderService {
         return newOrder;
     }
 
+    public boolean deleteOrderById(int id){
+        boolean removed = orders.removeIf(order -> order.getId() == id);
+        if(removed){
+            System.out.println("Order deleted");
+        }
+        return removed;
+    }
+
     public void processOrderPayment(int orderId){
         Order order = findOrderById(orderId).orElseThrow(() -> new IllegalArgumentException("Order with id " + orderId + " not found."));
         order.processOrderPayment();

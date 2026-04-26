@@ -32,6 +32,14 @@ public class RestaurantService{
         }
     }
 
+    public boolean deleteRestaurantByName(String name){
+        if(name == null) return false;
+        boolean removed = restaurants.removeIf(r -> r.getName().equalsIgnoreCase(name));
+        if(removed)
+            System.out.println("Restaurant " + name + " deleted successfully.");
+        return removed;
+    }
+
     public Optional<Restaurant> findByName(String name){
         return restaurants.stream().filter(r -> r.getName().equalsIgnoreCase(name)).findFirst();
     }
