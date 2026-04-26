@@ -37,6 +37,20 @@ public class UserService {
         System.out.println("User registered successfully: " + newUser);
     }
 
+    public boolean deleteUserByEmail(String email){
+        if(email == null)
+            return false;
+        return users.removeIf(user -> user.getEmail().equalsIgnoreCase(email));
+    }
+
+    public Optional<User> getUserById(int id){
+        return users.stream().filter(user -> user.getId() == id).findFirst();
+    }
+
+    public Optional<User> getUserByName(String name){
+        return users.stream().filter(user -> user.getName().equalsIgnoreCase(name)).findFirst();
+    }
+
     public List<User> getAllUsers(){
         return Collections.unmodifiableList(users);
     }
