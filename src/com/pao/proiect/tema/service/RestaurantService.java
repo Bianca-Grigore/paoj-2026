@@ -40,6 +40,25 @@ public class RestaurantService{
         return removed;
     }
 
+    public boolean updateRestaurantName(String currentName, String newName){
+        if(currentName == null || newName==null || newName.trim().isEmpty()){
+            throw new IllegalArgumentException("Current name and new name cannot be null or empty");
+        }
+        Optional<Restaurant> restaurantOptional = findByName(currentName);
+        if(restaurantOptional.isPresent()){
+            boolean name = restaurants.stream().anyMatch(r -> r.getName().equalsIgnoreCase(newName));
+            if(name){
+                System.out.println("Restaurant with name " + newName + " already exists. Cannot update name.");
+                return false;
+            }
+            restaurantOptional.get().setName(newName);
+            System.out.println("Restaurant name updated successfully from " + currentName + " to " + newName);
+            return true;
+        }
+        System.out.println("No restaurant found with name: " + currentName);
+        return false;
+    }
+
     public Optional<Restaurant> findByName(String name){
         return restaurants.stream().filter(r -> r.getName().equalsIgnoreCase(name)).findFirst();
     }

@@ -63,4 +63,8 @@ public class Restaurant {
     public void setOpen(boolean aTrue) {
         this.isOpen = aTrue;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

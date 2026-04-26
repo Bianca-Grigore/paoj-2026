@@ -43,6 +43,20 @@ public class UserService {
         return users.removeIf(user -> user.getEmail().equalsIgnoreCase(email));
     }
 
+    public boolean updateUserName(String email, String newName){
+        if(email == null || newName == null || newName.trim().isEmpty()){
+            throw new IllegalArgumentException("Email and new name cannot be null or empty");
+        }
+        Optional<User> userOptional = users.stream().filter(u -> u.getEmail().equalsIgnoreCase(email)).findFirst();
+        if(userOptional.isPresent()){
+            userOptional.get().setName(newName);
+            System.out.println("User name updated successfully for email: " + email);
+            return true;
+        }
+        System.out.println("No user found with email: " + email);
+        return false;
+    }
+
     public Optional<User> getUserById(int id){
         return users.stream().filter(user -> user.getId() == id).findFirst();
     }
