@@ -25,7 +25,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int n = Integer.parseInt(scanner.nextLine());
         List<Tranzactie> tranzactii = new ArrayList<>();
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
 
             String[] date = scanner.nextLine().trim().split(" ");
 
@@ -40,16 +40,16 @@ public class Main {
             tranzactii.add(new Tranzactie(id, suma, data, contSursa, contDestinatie, tip));
         }
 
-        for(Tranzactie t : tranzactii){
+        for (Tranzactie t : tranzactii) {
             t.setNote("procesat");
         }
 
 // 3. Serializează lista de tranzacții în OUTPUT_FILE cu ObjectOutputStream (try-with-resources)
 
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(OUTPUT_FILE))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(OUTPUT_FILE))) {
             oos.writeObject(tranzactii);
             //System.out.println("Tranzacțiile au fost serializate în " + OUTPUT_FILE);
-        }catch(IOException e){
+        } catch (IOException e) {
             System.err.println("Eroare la serializare: " + e.getMessage());
         }
 
@@ -57,27 +57,48 @@ public class Main {
 
 // 4. Deserializează lista din OUTPUT_FILE cu ObjectInputStream (try-with-resources)
 
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(OUTPUT_FILE))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(OUTPUT_FILE))) {
             tranzactiiDeserialized = (List<Tranzactie>) ois.readObject();
             //System.out.println("Tranzacțiile au fost deserializate din " + OUTPUT_FILE);
-        }catch(IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Eroare la deserializare: " + e.getMessage());
         }
 
 // 5. Procesează comenzile din stdin până la EOF:
 
-        while(scanner.hasNextLine()){
-            String comanda = scanner.nextLine();
-            switch(comanda){
-                case "LIST" ->{
-                    for(Tranzactie t : tranzactiiDeserialized){
+        while (scanner.hasNextLine()) {
+            String[] comanda = scanner.nextLine().trim().split(" ");
+
+            switch (comanda[0]) {
+                case "LIST" -> {
+                    for (Tranzactie t : tranzactiiDeserialized) {
                         System.out.println(t);
                     }
                 }
 
+                case "FILTER" -> {
+                    String prefix = comanda[1];
+                    boolean gasit = false;
+                    for (Tranzactie t : tranzactiiDeserialized) {
+                        if (t.getData().startsWith(prefix)) {
+                            System.out.println(t);
+                            gasit = true;
+                        }
+                    }
+                    if (!gasit)
+                        System.out.println("Niciun rezultat.");
+                }
+
+                case "NOTE" -> {
+                    int id = Integer.parseInt(comanda[1]);
+                    tranzactiiDeserialized.stream().filter(t -> t.getId() == id).findFirst().ifPresentOrElse(
+                            t -> System.out.println("NOTE[" + id + "]: " + t.getNote()),
+                            () -> System.out.println("NOTE[" + id + "]: not found")
+                    );
+
+                }
+
             }
-
         }
-
     }
 }

@@ -35,4 +35,12 @@ public class Tranzactie implements Serializable {
     public String toString(){
         return "[" + id + "] " + data + " " + tip + ": " + String.format("%.2f", suma) + " RON | " + contSursa + " -> " + contDestinatie;
     }
+
+    public String getData() {
+        return data;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

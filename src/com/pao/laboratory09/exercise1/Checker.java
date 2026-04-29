@@ -5,11 +5,11 @@ import com.pao.test.IOTest;
 public class Checker {
     public static void main(String[] args) {
         // Rulează toate testele:
-        //IOTest.runParts("src/com/pao/laboratory09/exercise1/tests", Main::main);
+        IOTest.runParts("src/com/pao/laboratory09/exercise1/tests", Main::main);
 
         // Sau rulează doar testele pentru o parte specifică:
-       IOTest.runPart("src/com/pao/laboratory09/exercise1/tests", "partA", Main::main);
-//        IOTest.runPart("src/com/pao/laboratory09/exercise1/tests", "partB", Main::main);
+       //IOTest.runPart("src/com/pao/laboratory09/exercise1/tests", "partA", Main::main);
+    //IOTest.runPart("src/com/pao/laboratory09/exercise1/tests", "partB", Main::main);
 //        IOTest.runPart("src/com/pao/laboratory09/exercise1/tests", "partC", Main::main);
     }
 }
