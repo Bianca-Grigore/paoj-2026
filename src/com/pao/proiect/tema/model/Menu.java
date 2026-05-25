@@ -5,7 +5,24 @@ import java.util.stream.Collectors;
 
 public class Menu {
     private List<MenuItem> items;
+    private int id;
+    private int restaurantId;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
     public Menu(){
         this.items = new ArrayList<>();
     }

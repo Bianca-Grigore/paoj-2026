@@ -149,4 +149,16 @@ public class Order {
     public Map<MenuItem, Integer> getItems() {
         return items;
     }
+
+    public void setId(int id) { this.id = id; }
+    public LocalDateTime getOrderDate() { return orderDate; }
+    public LocalDateTime getDeliveryDate() { return deliveryDate; }
+    public DeliveryPerson getDriver() { return driver; }
+    public double getDeliveryFee() { return deliveryFee; }
+    public String getNotes() { return notes; }
+    public Payment getPaymentMethod() { return paymentMethod; }
+    public void setOrderDate(LocalDateTime date) { this.orderDate = date; }
+    public void setDeliveryDate(LocalDateTime date) { this.deliveryDate = date; }
+    public void setStatus(OrderStatus status) { this.status = status; }
+    public void setDriver(DeliveryPerson driver) { this.driver = driver; }
 }

@@ -17,6 +17,10 @@ public abstract sealed class User permits Customer, DeliveryPerson, RestaurantAd
         this.password = password;
     }
 
+    public User() {
+
+    }
+
     public void updateInfo(String newEmail, String newPhoneNum){
         this.email = newEmail;
         this.phoneNum=newPhoneNum;
@@ -73,5 +77,9 @@ public abstract sealed class User permits Customer, DeliveryPerson, RestaurantAd
 
     public String getPassword() {
         return password;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

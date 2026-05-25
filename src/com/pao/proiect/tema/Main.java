@@ -5,6 +5,7 @@ import com.pao.proiect.tema.exception.EmptyCartException;
 import com.pao.proiect.tema.exception.InvalidAllergenException;
 import com.pao.proiect.tema.exception.InvalidOrderStatusException;
 import com.pao.proiect.tema.model.*;
+import com.pao.proiect.tema.repository.MenuItemsRepository;
 import com.pao.proiect.tema.service.RestaurantService;
 import com.pao.proiect.tema.service.OrderService;
 import com.pao.proiect.tema.service.UserService;
@@ -20,16 +21,8 @@ public class Main {
     private static final OrderService order = OrderService.getInstance();
     private static final RestaurantService restaurant = RestaurantService.getInstance();
     private static User userCurrent = null;
-
+    private static MenuItemsRepository menuItemsRepository = new MenuItemsRepository();
     public static void main(String[] args) {
-        try {
-            DataLoader.loadData(user, restaurant);
-        } catch (IOException e) {
-            System.err.println("Loading data error: " + e.getMessage());
-            return;
-        }
-        System.out.println("Data loaded successfully!");
-        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         Scanner scanner = new Scanner(System.in);
         boolean active = true;
@@ -440,9 +433,7 @@ public class Main {
         var res = restaurant.findByName(restaurantName);
         if(res.isEmpty()){
             System.out.println("Restaurant not found: " + restaurantName);
-            return;
-        }
-        else{
+        } else {
             System.out.println("Menu for " + restaurantName);
             res.get().getMenu().getItems().forEach(System.out::println);
 
@@ -451,7 +442,24 @@ public class Main {
                 int productId = Integer.parseInt(scanner.nextLine().trim());
                 System.out.println("Enter new price: ");
                 double newPrice = Double.parseDouble(scanner.nextLine().trim());
+
                 boolean updated = res.get().getMenu().updatePrice(productId, newPrice);
+
+                if (updated) {
+                    res.get().getMenu().getItems().stream()
+                            .filter(item -> item.getId() == productId)
+                            .findFirst()
+                            .ifPresent(item -> {
+                                try {
+                                    menuItemsRepository.update(item);
+                                    System.out.println("Price updated successfully in database!");
+                                } catch (Exception e) {
+                                    System.out.println("Database error: Could not update price.");
+                                }
+                            });
+                } else {
+                    System.out.println("Product not found in menu.");
+                }
 
             }catch (NumberFormatException e){
                 System.out.println("Invalid input. Please enter valid numbers.");
@@ -460,7 +468,6 @@ public class Main {
             }
         }
     }
-
     private static void updateOrderStatus(Scanner scanner){
         System.out.println("Update order status");
         if(!(userCurrent instanceof DeliveryPerson)){
@@ -490,13 +497,13 @@ public class Main {
                     ord ->{
                         try{
                             if(ord.getStatus() == OrderStatus.PREPARING){
-                                ord.assignDriver((DeliveryPerson) userCurrent);
+                                order.assignDriver(orderId, (DeliveryPerson) userCurrent);
                             }else{
                                 if(ord.getStatus() == OrderStatus.READY_FOR_PICKUP){
-                                    ord.markDelivered();
+                                    order.deliveryOrder(orderId);
                                 }
                             }
-                        }catch(InvalidOrderStatusException e){
+                        }catch(Exception e){
                             System.out.println("Cannot update order status: " + e.getMessage());
                         }
                     }, () -> System.out.println("Order with ID " + orderId + " not found among active orders."));
@@ -522,7 +529,6 @@ public class Main {
         });
         System.out.println("Subtotal: " + customer.getCart().calculateSubtotal() + "RON");
     }
-
     private static void addProductToMenu(Scanner scanner){
         if(!(userCurrent instanceof RestaurantAdmin)){
             System.out.println("Only restaurant admins can add products to menu.");
@@ -589,14 +595,21 @@ public class Main {
 
         var restaurantName = restaurantAdmin.getRestaurantName();
         MenuItem finalNewItem = newItem;
+
         restaurant.findByName(restaurantName).ifPresentOrElse(r -> {
-            r.addProduct(finalNewItem);
-            System.out.println("Product added to menu successfully!");
+
+            try {
+                menuItemsRepository.save(finalNewItem);
+                r.addProduct(finalNewItem);
+                System.out.println("Product added to menu successfully!");
+            } catch (Exception e) {
+                System.out.println("Database error: Could not save product. " + e.getMessage());
+            }
+
         }, () -> {
             System.out.println("Restaurant not found: " + restaurantName + ". Product not added to menu.");
         });
     }
-
     private static void removeProductFromMenu(Scanner scanner){
         if(!(userCurrent instanceof RestaurantAdmin)){
             System.out.println("Only restaurant admins can remove products.");
@@ -617,11 +630,16 @@ public class Main {
                 System.out.println("Product with ID " + id + " not found in menu. No product removed.");
             }
             else{
-                System.out.println("Product removed successfully!");
+                try {
+                    menuItemsRepository.delete(id);
+                    System.out.println("Product removed successfully from database!");
+                } catch (Exception e) {
+                    System.out.println("Database error: Could not remove product.");
+                }
             }
         }, () ->{
-                System.out.println("Restaurant not found: " + restaurantAdmin.getRestaurantName() + ". No product removed.");
-            });
+            System.out.println("Restaurant not found: " + restaurantAdmin.getRestaurantName() + ". No product removed.");
+        });
     }
 
     private static void placeOrder(Scanner scanner){

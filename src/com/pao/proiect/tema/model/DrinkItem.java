@@ -56,4 +56,31 @@ public non-sealed class DrinkItem extends MenuItem {
     public String toString(){
         return super.toString() + ", volume: " + volumeMl + ", alcohol percentage: " + alcoholPercentage + "%, hot drink: " + isHot;
     }
+    public void setAlcoholPercentage(double alcoholPercentage) {
+        this.alcoholPercentage = alcoholPercentage;
+    }
+
+    public boolean isContainsAlcohol() {
+        return containsAlcohol;
+    }
+
+    public void setContainsAlcohol(boolean containsAlcohol) {
+        this.containsAlcohol = containsAlcohol;
+    }
+
+    public boolean isHot() {
+        return isHot;
+    }
+
+    public void setHot(boolean hot) {
+        isHot = hot;
+    }
+
+    public int getVolumeMl() {
+        return volumeMl;
+    }
+
+    public void setVolumeMl(int volumeMl) {
+        this.volumeMl = volumeMl;
+    }
 }

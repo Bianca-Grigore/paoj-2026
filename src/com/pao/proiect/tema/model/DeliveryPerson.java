@@ -14,6 +14,10 @@ public final class DeliveryPerson extends User {
         this.totalDeliveries = 0;
     }
 
+    public DeliveryPerson() {
+
+    }
+
     public void incrementDeliveries(){
         this.totalDeliveries += 1;
     }
@@ -59,5 +63,8 @@ public final class DeliveryPerson extends User {
     @Override
     public String toString(){
         return super.toString() + " vehicle type: " + vehicleType + ", rating: " + rating + ", total deliveries: " + totalDeliveries;
+    }
+    public void setTotalDeliveries(int totalDeliveries) {
+        this.totalDeliveries = totalDeliveries;
     }
 }

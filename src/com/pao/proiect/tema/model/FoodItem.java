@@ -31,4 +31,29 @@ public non-sealed class FoodItem extends MenuItem {
     public String toString(){
         return super.toString() + ", grams: " + weightGrams + ", spiciness: " + spicinessLevel + ", course type: " + courseType;
     }
+
+
+    public double getWeightGrams() {
+        return weightGrams;
+    }
+
+    public void setWeightGrams(double weightGrams) {
+        this.weightGrams = weightGrams;
+    }
+
+    public CourseType getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(CourseType courseType) {
+        this.courseType = courseType;
+    }
+
+    public Spiciness getSpicinessLevel() {
+        return spicinessLevel;
+    }
+
+    public void setSpicinessLevel(Spiciness spicinessLevel) {
+        this.spicinessLevel = spicinessLevel;
+    }
 }
