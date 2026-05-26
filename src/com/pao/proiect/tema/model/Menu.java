@@ -34,7 +34,6 @@ public class Menu {
 
         if(!items.contains(item)){
             items.add(item);
-            System.out.println("Product added to menu: " + item.getName());
         }
         else{
             System.out.println("Product already exists in menu: " + item.getName());

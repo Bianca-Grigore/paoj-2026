@@ -1,5 +1,6 @@
 package com.pao.proiect.tema.repository;
 
+import com.pao.proiect.tema.model.MenuItem;
 import com.pao.proiect.tema.model.Restaurant;
 import com.pao.proiect.tema.model.RestaurantAdmin;
 import com.pao.proiect.tema.model.User;
@@ -32,17 +33,29 @@ public class RestaurantsRepository implements Repository<Restaurant, Integer>{
         Restaurant restaurant = new Restaurant(name, address, admin);
         restaurant.setOpen(isOpen);
         restaurant.setId(id);
+
         String sqlMenu = "SELECT id FROM menus WHERE restaurant_id = ?";
         try (PreparedStatement psMenu = getConn().prepareStatement(sqlMenu)) {
             psMenu.setInt(1, id);
             try (ResultSet rsMenu = psMenu.executeQuery()) {
                 if (rsMenu.next()) {
-                    restaurant.getMenu().setId(rsMenu.getInt("id"));
+                    int menuId = rsMenu.getInt("id");
+                    restaurant.getMenu().setId(menuId);
+
+                    MenuItemsRepository itemsRepo = new MenuItemsRepository();
+                    List<MenuItem> fetchedItems = itemsRepo.findByMenuId(menuId);
+
+                    for (MenuItem item : fetchedItems) {
+                        restaurant.getMenu().addProduct(item);
+
+                    }
+
                 }
             }
         } catch (IOException e) {
             throw new SQLException("Database error", e);
         }
+
         return restaurant;
     }
 
