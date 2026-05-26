@@ -4,10 +4,7 @@ import com.pao.proiect.tema.model.*;
 import com.pao.proiect.tema.util.DatabaseConnection;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +73,7 @@ public class MenuItemsRepository implements Repository<MenuItem, Integer> {
         }
         return items;
     }
-    @Override
+
     public void save(MenuItem entity) throws SQLException {
         String sql = "INSERT INTO menu_items (menu_id, item_type, name, calories, price, description, is_available, estimate_time, is_vegan, is_vegetarian, weight_grams, spiciness_level, course_type, contains_alcohol, alcohol_percentage, volume_ml, is_hot) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(PreparedStatement ps = getConn().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -90,9 +87,14 @@ public class MenuItemsRepository implements Repository<MenuItem, Integer> {
             ps.setBoolean(9, entity.isVegan());
             ps.setBoolean(10, entity.isVegetarian());
 
-            for(int i = 11; i <= 17; i++){
-                ps.setObject(i, null);
-            }
+            ps.setNull(11, Types.DOUBLE);
+            ps.setNull(12, Types.VARCHAR);
+            ps.setNull(13, Types.VARCHAR);
+            ps.setNull(14, Types.BOOLEAN);
+            ps.setNull(15, Types.DOUBLE);
+            ps.setNull(16, Types.INTEGER);
+            ps.setNull(17, Types.BOOLEAN);
+
             if(entity instanceof FoodItem food){
                 ps.setString(2, "FOOD");
                 ps.setDouble(11, food.getWeightGrams());

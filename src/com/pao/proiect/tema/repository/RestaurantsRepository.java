@@ -32,31 +32,74 @@ public class RestaurantsRepository implements Repository<Restaurant, Integer>{
         Restaurant restaurant = new Restaurant(name, address, admin);
         restaurant.setOpen(isOpen);
         restaurant.setId(id);
+        String sqlMenu = "SELECT id FROM menus WHERE restaurant_id = ?";
+        try (PreparedStatement psMenu = getConn().prepareStatement(sqlMenu)) {
+            psMenu.setInt(1, id);
+            try (ResultSet rsMenu = psMenu.executeQuery()) {
+                if (rsMenu.next()) {
+                    restaurant.getMenu().setId(rsMenu.getInt("id"));
+                }
+            }
+        } catch (IOException e) {
+            throw new SQLException("Database error", e);
+        }
         return restaurant;
     }
 
     @Override
     public void save(Restaurant entity) throws SQLException {
         String sql = "INSERT INTO restaurants (name, address, is_open, admin_id) VALUES (?, ?, ?, ?)";
-        try(PreparedStatement ps = getConn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
-            ps.setString(1, entity.getName());
-            ps.setString(2, entity.getAddress());
-            ps.setBoolean(3, entity.isOpen());
-            if(entity.getAdmin() != null){
-                ps.setInt(4, entity.getAdmin().getId());
-            }
-            else{
-                ps.setNull(4, Types.INTEGER);
-            }
+        String sqlMenu = "INSERT INTO menus (restaurant_id) VALUES (?)";
+        Connection conn = null;
+        try {
+            conn = getConn();
+            conn.setAutoCommit(false);
 
-            ps.executeUpdate();
-            try(ResultSet keys = ps.getGeneratedKeys()){
-                if(keys.next()){
-                    entity.setId(keys.getInt(1));
+            try (PreparedStatement ps = getConn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, entity.getName());
+                ps.setString(2, entity.getAddress());
+                ps.setBoolean(3, entity.isOpen());
+                if (entity.getAdmin() != null) {
+                    ps.setInt(4, entity.getAdmin().getId());
+                } else {
+                    ps.setNull(4, Types.INTEGER);
+                }
+
+                ps.executeUpdate();
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        entity.setId(keys.getInt(1));
+                    }
                 }
             }
-        }catch (IOException e){
-            throw new SQLException(e);
+            try(PreparedStatement psMenu = conn.prepareStatement(sqlMenu, Statement.RETURN_GENERATED_KEYS)){
+                psMenu.setInt(1, entity.getId());
+                psMenu.executeUpdate();
+
+                try(ResultSet keys = psMenu.getGeneratedKeys()){
+                    if(keys.next()){
+                        entity.getMenu().setId(keys.getInt(1));
+                    }
+                }
+            }
+            conn.commit();
+        }catch (SQLException | IOException exception){
+            if(conn != null){
+                try{
+                    conn.rollback();
+                }catch(SQLException e ){
+                    e.printStackTrace();
+                }
+            }
+            throw new SQLException("Error saving restaurant and menu");
+        }finally{
+            if(conn != null){
+                try{
+                    conn.setAutoCommit(true);
+                }catch(SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 

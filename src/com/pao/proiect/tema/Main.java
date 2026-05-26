@@ -23,7 +23,6 @@ public class Main {
     private static User userCurrent = null;
     private static MenuItemsRepository menuItemsRepository = new MenuItemsRepository();
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
         boolean active = true;
         while (active) {
