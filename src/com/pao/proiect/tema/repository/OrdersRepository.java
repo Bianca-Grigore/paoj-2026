@@ -271,7 +271,7 @@ public class OrdersRepository implements  Repository<Order, Integer>{
             ps.setInt(1, orderId);
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    System.out.println("Order " + rs.getInt("id") + " Customer " + rs.getString("customer_name") + " Restaurant name " + rs.getString("restaurant_name"));
+                    System.out.println("Order id: " + rs.getInt("id") + "\n Customer: " + rs.getString("customer_name") + "\n Restaurant name: " + rs.getString("restaurant_name"));
                 }
                 else{
                     System.out.println("No order found with id: " + orderId);

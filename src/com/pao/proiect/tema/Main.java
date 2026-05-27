@@ -6,11 +6,14 @@ import com.pao.proiect.tema.exception.InvalidAllergenException;
 import com.pao.proiect.tema.exception.InvalidOrderStatusException;
 import com.pao.proiect.tema.model.*;
 import com.pao.proiect.tema.repository.MenuItemsRepository;
+import com.pao.proiect.tema.repository.OrdersRepository;
+import com.pao.proiect.tema.repository.RestaurantsRepository;
 import com.pao.proiect.tema.service.RestaurantService;
 import com.pao.proiect.tema.service.OrderService;
 import com.pao.proiect.tema.service.UserService;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +25,9 @@ public class Main {
     private static final RestaurantService restaurant = RestaurantService.getInstance();
     private static User userCurrent = null;
     private static MenuItemsRepository menuItemsRepository = new MenuItemsRepository();
+    private static RestaurantsRepository restaurantsRepository = new RestaurantsRepository();
+    private static OrdersRepository ordersRepository = new OrdersRepository();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean active = true;
@@ -124,6 +130,22 @@ public class Main {
                     updateOrderStatus(scanner);
                     break;
                 }
+                case "16" -> {
+                    System.out.println("Print restaurants statistics");
+                    try {
+                        restaurantsRepository.printResStatistics();
+                    }catch (SQLException e){
+                        System.out.println("Error fetching restaurant statistics: " + e.getMessage());
+                    }
+                }
+                case "17" -> {
+                    System.out.println("Order details: ");
+                    try{
+                        ordersRepository.printOrdersDetails(1);
+                    }catch(SQLException e){
+                        System.out.println("Error fetching order details: " + e.getMessage());
+                    }
+                }
 
                 case "0" -> {
                     active = false;
@@ -159,6 +181,9 @@ public class Main {
 
         System.out.println("-----Deliveries (delivery person only)-----");
         System.out.println("15. Update order status");
+        System.out.println("---extra---");
+        System.out.println("16. Print restaurants statistics");
+        System.out.println("17. Print order details");
 
         System.out.println("-----EXIT-----");
         System.out.println("0.Exit");
